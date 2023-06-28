@@ -3,6 +3,7 @@ import "../SeatSelection.css";
 
 function TicketBookingPage({ account }) {
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSeatSelection = (row, seat) => {
     const seatKey = `${row}-${seat}`;
@@ -15,6 +16,19 @@ function TicketBookingPage({ account }) {
       const updatedSeats = [...selectedSeats, seatKey];
       setSelectedSeats(updatedSeats);
     }
+
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setSelectedSeats([]);
+    setIsModalOpen(false);
+  };
+
+  const handleConfirmBooking = () => {
+    console.log("Selected Seats:", selectedSeats);
+    // 예매 확인 처리 함수?
+    // ex)선택된 좌석 전송
   };
 
   const renderSeatMap = () => {
@@ -36,10 +50,7 @@ function TicketBookingPage({ account }) {
           <div
             key={seatKey}
             className={`seat ${isSelected ? "selected" : ""}`}
-            onClick={() => handleSeatSelection(row, seat)}>
-            {/* 숫자 표시를 주석 처리 */}
-            {/* {isSelected ? "" : seat} */}
-          </div>
+            onClick={() => handleSeatSelection(row, seat)}></div>
         );
       }
 
@@ -57,14 +68,20 @@ function TicketBookingPage({ account }) {
         <h1>테이블석</h1>
       </div>
       <div className="seat-map">{renderSeatMap()}</div>
-      <div className="footer">
-        <h2>선택된 좌석</h2>
-        <p>
-          {selectedSeats.length === 0
-            ? "선택된 좌석이 없습니다."
-            : selectedSeats.join(", ")}
-        </p>
-      </div>
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>좌석 확인</h2>
+            <div className="selected-seats">
+              <p>선택한 좌석: {selectedSeats.join(", ")}</p>
+            </div>
+            <div className="modal-buttons">
+              <button onClick={handleConfirmBooking}>예매하기</button>
+              <button onClick={handleModalClose}>취소</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
