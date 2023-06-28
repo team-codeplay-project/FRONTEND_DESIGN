@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #8d85f9;
+  overflow: hidden;
+}
+
+.iphone13 {
+  width: 390px; /* iPhone 13 width */
+  height: 844px; /* iPhone 13 height */
+  overflow: hidden;
+  border-radius: 30px;
+  background-color: black;
+  position: relative;
+}
+
+.iphone13::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
+  z-index: -1;
+}
+
+.seat {
+  display: inline-block;
+  width: 13px; /* 좌석 너비 조정 */
+  height: 13px; /* 좌석 높이 조정 */
+  background-color: rgba(128, 128, 128, 0.3); /* 투명한 회색 */
+  border: 1px solid rgba(183, 181, 181, 0.3);
+  margin: 3px; /* 좌석 간격 조정 */
+  text-align: center;
+  line-height: 20px; /* 좌석 안의 숫자 위치 조정 */
+  cursor: pointer;
+  border-radius: 10%;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.seat.selected {
+  background-color: #665ee0;
+  border: 1px solid #665ee0;
+  color: white;
+}
+
+.seat:not(.selected) {
+  background-color: rgba(128, 128, 128, 0.3);
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  color: black;
+}

@@ -1,0 +1,23 @@
+body {
+  background: #8d85f9;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  max-width: 390px; /* iPhone 13 width */
+  max-height: 844px; /* iPhone 13 height */
+  overflow: auto;
+  margin: 30px auto;
+  border-radius: 30px;
+  background-color: black;
+}
+.footer-container {
+  display: flex;
+  justify-content: center;
+}
