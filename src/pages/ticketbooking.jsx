@@ -28,7 +28,7 @@ function TicketBookingPage({ account }) {
   const handleConfirmBooking = () => {
     console.log("Selected Seats:", selectedSeats);
     // 예매 확인 처리 함수?
-    // ex)선택된 좌석 전송
+    // 선택된 좌석 전송
   };
 
   const renderSeatMap = () => {
@@ -71,7 +71,6 @@ function TicketBookingPage({ account }) {
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
-            <h2>좌석 확인</h2>
             <div className="selected-seats">
               <p>선택한 좌석: {selectedSeats.join(", ")}</p>
             </div>
