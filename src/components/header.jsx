@@ -24,7 +24,7 @@ const Header = ({ account, setAccount }) => {
       <div className="flex items-center">
         <div className="relative flex items-center">
           <FaSearch
-            className="absolute left-3 text-gray-400"
+            className="absolute left-3 text-gray-400 "
             style={{ top: "50%", transform: "translateY(-50%)" }}
           />
           <input

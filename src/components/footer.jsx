@@ -1,16 +1,42 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoTicketSharp } from "react-icons/io5";
 import { MdEvent } from "react-icons/md";
 import { BiBaseball } from "react-icons/bi";
 import { useState } from "react";
-import "../App.css";
 
 const Footer = () => {
   const [activeButton, setActiveButton] = useState(null);
+  const [showTicketScreen, setShowTicketScreen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedBlock, setSelectedBlock] = useState("");
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
+    if (buttonName === "Tickets") {
+      setShowTicketScreen(true);
+    } else {
+      setShowTicketScreen(false);
+    }
+  };
+
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const handleTimeChange = (event) => {
+    setSelectedTime(event.target.value);
+  };
+
+  const handleBlockChange = (event) => {
+    setSelectedBlock(event.target.value);
+  };
+
+  const handleBookTickets = () => {
+    // Book Tickets 버튼을 클릭할 때 필요한 동작을 수행합니다.
+    setShowTicketScreen(false); // 모달을 닫습니다.
   };
 
   return (
@@ -27,7 +53,8 @@ const Footer = () => {
           padding: "0 16px",
           borderRadius: "20px",
         }}>
-        <button
+        <Link
+          to="/"
           className={`inline-flex flex-col space-y-1 items-center justify-end w-1/4 h-full py-2 rounded-2xl transition-colors ${
             activeButton === "Home"
               ? "bg-indigo-500 bg-opacity-30"
@@ -45,8 +72,9 @@ const Footer = () => {
             }`}>
             Home
           </p>
-        </button>
+        </Link>
         <button
+          to="/ticket-booking"
           className={`inline-flex flex-col space-y-1 items-center justify-end w-1/4 h-full py-2 rounded-2xl transition-colors ${
             activeButton === "Tickets"
               ? "bg-indigo-500 bg-opacity-30"
@@ -104,7 +132,77 @@ const Footer = () => {
           </p>
         </button>
       </div>
+
+      {showTicketScreen && (
+        <div
+          className="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center"
+          style={{ zIndex: 2 }}>
+          <div className="w-64 h-96 bg-white rounded-lg shadow-lg p-4">
+            <div className="flex justify-end mb-4">
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowTicketScreen(false)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <h2 className="text-lg font-semibold">Ticket Screen</h2>
+            <div className="mt-4">
+              <label className="block mb-4 text-sm font-medium">
+                Date:
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  value={selectedDate}
+                  onChange={handleDateChange}>
+                  <option value="">날짜 선택</option>
+                  {/* 날짜 */}
+                </select>
+              </label>
+              <label className="block mb-4 text-sm font-medium">
+                Time:
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  value={selectedTime}
+                  onChange={handleTimeChange}>
+                  <option value="">시간 선택</option>
+                  {/* 시간 */}
+                </select>
+              </label>
+              <label className="block mb-4 text-sm font-medium">
+                Seat Block:
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  value={selectedBlock}
+                  onChange={handleBlockChange}>
+                  <option value="">구역 선택</option>
+                  {/* 좌석 블록*/}
+                </select>
+              </label>
+              <div className="flex justify-center">
+                <Link
+                  to="/seatselection"
+                  className="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-center rounded-full font-medium transition-colors shadow-sm duration-300"
+                  onClick={handleBookTickets}>
+                  좌석 선택
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 export default Footer;
