@@ -5,11 +5,13 @@ import MainPage from './pages/main';
 import TicketBookingPage from './pages/ticketbooking';
 import MyPage from './pages/mypage';
 import EventPage from './pages/event';
-import TestPage from './pages/test';
+import TestPage from './pages/raffle';
 import SeatSelectionPage from './components/seatselection';
 import { useState } from 'react';
 import './App.css';
 import Footer from './components/footer';
+import Rafflelist from './pages/rafflelist';
+import Raffle from './pages/raffle';
 
 function App() {
   const [account, setAccount] = useState('');
@@ -38,7 +40,8 @@ function App() {
             />
             <Route path="/mypage" element={<MyPage account={account} />} />
             <Route path="/event" element={<EventPage account={account} />} />
-            <Route path="/test" element={<TestPage account={account} />} />
+            <Route path="/test" element ={<Rafflelist account={account} />}/>
+            <Route path="/test/:r_idx" element={<Raffle account={account} />} />
             <Route
               path="/seatselection"
               element={<SeatSelectionPage account={account} />}

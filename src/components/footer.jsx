@@ -93,12 +93,14 @@ const Footer = () => {
             Tickets
           </p>
         </button>
-        <button
-          className={`inline-flex flex-col space-y-1 items-center justify-end w-1/4 h-full py-2 rounded-2xl transition-colors ${
+        {/* <Link to="/test" > */}
+        <Link className={`inline-flex flex-col space-y-1 items-center justify-end w-1/4 h-full py-2 rounded-2xl transition-colors ${
             activeButton === "Events"
               ? "bg-indigo-500 bg-opacity-30"
               : "hover:bg-white hover:bg-opacity-20"
-          }`}
+          }`} to= "/test">
+        <button
+          
           onClick={() => handleButtonClick("Events")}>
           <MdEvent
             className={`w-8 h-8 rounded-full shadow ${
@@ -112,6 +114,8 @@ const Footer = () => {
             Events
           </p>
         </button>
+        </Link>
+        {/* </Link> */}
         <button
           className={`inline-flex flex-col space-y-1 items-center justify-end w-1/4 h-full py-2 rounded-2xl transition-colors ${
             activeButton === "Mypage"
