@@ -5,7 +5,6 @@ import MainPage from './pages/main';
 import TicketBookingPage from './pages/ticketbooking';
 import MyPage from './pages/mypage';
 import EventPage from './pages/event';
-import TestPage from './pages/raffle';
 import SeatSelectionPage from './components/seatselection';
 import { useState } from 'react';
 import './App.css';
@@ -40,8 +39,6 @@ function App() {
         "method": "eth_chainId",
         "params": []
       });
-
-      console.log( 'id : ' , id ) ;
 
       if( id !== 0x5 ) {
         await window.ethereum.request({

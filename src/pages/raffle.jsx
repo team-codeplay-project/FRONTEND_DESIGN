@@ -3,6 +3,7 @@ import Web3 from "web3";
 import { b_abi , b_addr } from "../raffletest.config" ;
 import { useParams } from "react-router-dom";
 import { AppContext } from "../App";
+import axios from "axios";
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract( b_abi , b_addr );
@@ -17,16 +18,21 @@ const Raffle = () => {
   const get_R_data = async () => {
 
     try { 
-    const f_B = 9270146 ; // fromBlock : 은 디비에서
-    const a = await contract.getPastEvents('Raffle', {filter : { _idx : r_idx }, fromBlock : f_B , toBlock : 'latest'});
 
-    for (const v of a) {
-      const nowdata = v.returnValues._add.toLowerCase();
-      if (nowdata === account) {
-        setChkScreen(true);
-        break; // 중지
-      }
-    }
+    const response = await axios.get( `${process.env.REACT_APP_BACKEND_URL}/raffle/${r_idx}` ) ;
+    
+    console.log(response);
+    const f_B = response.data.start_block ; // fromBlock : 은 디비에서
+    console.log(f_B);
+    // const a = await contract.getPastEvents('Raffle', {filter : { _idx : r_idx }, fromBlock : f_B , toBlock : 'latest'});
+
+    // for (const v of a) {
+    //   const nowdata = v.returnValues._add.toLowerCase();
+    //   if (nowdata === account) {
+    //     setChkScreen(true);
+    //     break; // 중지
+    //   }
+    // }
 
     setIsLoading(false) ;
 //    console.log( 'chk_raffle!' ) ;
@@ -42,7 +48,6 @@ const Raffle = () => {
     try {
     
     await contract.methods.Raffle_participate(r_idx).send({from:account}); 
-
     get_R_data() ;
 
     } catch (error) {
@@ -54,7 +59,8 @@ const Raffle = () => {
 
   useEffect( () => { 
     chkchainID() ;
-    get_R_data() ; } , [] ) ;
+    get_R_data() ;
+  } , [] ) ;
 
   return (
     <div className="w-[390px] h-[844px] rounded-[30px] relative text-white">
