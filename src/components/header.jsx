@@ -1,24 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaSearch, FaBars } from "react-icons/fa";
 import { BsCreditCardFill } from "react-icons/bs";
+import { AppContext } from "../App";
 
-const Header = ({ account, setAccount }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+const Header = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-
-  const onClickAccount = async () => {
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      setAccount(accounts[0]);
-      setLoggedIn(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { account , connect , logIn } = useContext(AppContext);
 
   const handleSearchFocus = () => {
     setIsSearching(true);
@@ -48,14 +36,14 @@ const Header = ({ account, setAccount }) => {
             {!isSearching && (
               <FaSearch
                 className={`absolute left-10 text-gray-400 transition-transform transform ${
-                  loggedIn ? "translate-x-2" : ""
+                  logIn ? "translate-x-2" : ""
                 }`}
                 style={{
                   top: "50%",
                   transform: "translateY(-50%)",
                   fontSize: "14px",
                   transition: "transform 0.3s",
-                  color: loggedIn
+                  color: logIn
                     ? "rgba(255, 255, 255, 0.5)"
                     : "rgba(255, 255, 255, 0.4)",
                 }}
@@ -63,7 +51,7 @@ const Header = ({ account, setAccount }) => {
             )}
             <input
               className={`px-1 py-1 pl-8 rounded-lg mr-4 bg-gray-800 text-white focus:outline-none ${
-                loggedIn ? "text-opacity-40" : "text-opacity-40"
+                logIn ? "text-opacity-40" : "text-opacity-40"
               }`}
               type="text"
               placeholder={isSearching ? "" : "         Search Game"}
@@ -75,28 +63,28 @@ const Header = ({ account, setAccount }) => {
           </div>
           <button
             className={`relative text-white hover:text-gray-300 flex items-center ml-2 mr-5 ${
-              loggedIn ? "text-purple-500" : ""
+              logIn ? "text-purple-500" : ""
             }`}
-            onClick={onClickAccount}>
+            onClick={connect}>
             <BsCreditCardFill
               className={`mr-1 transition-transform transform ${
-                loggedIn ? "scale-90" : ""
+                logIn ? "scale-90" : ""
               }`}
               style={{
                 fontSize: "34px",
-                color: loggedIn ? "rgba(255, 255, 255, 0.8)" : "#ffffff",
+                color: logIn ? "rgba(255, 255, 255, 0.8)" : "#ffffff",
                 transition: "transform 0.3s",
               }}
             />
 
-            {loggedIn && (
+            {logIn && (
               <span
                 className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs transition-opacity ${
                   account ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
-                  color: loggedIn ? "#665ee0" : "#ffffff",
-                  opacity: loggedIn ? 1 : 0.8,
+                  color: logIn ? "#665ee0" : "#ffffff",
+                  opacity: logIn ? 1 : 0.8,
                   transition: "opacity 0.3s",
                 }}>
                 {account.substr(account.length - 4)}
