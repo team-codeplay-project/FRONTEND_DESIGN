@@ -2,10 +2,14 @@ import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 
+const chk = {} ;
 const AdminPage = () => {
-  const [raffle, setRaffle] = useState();
-  const [Goods_url, setUrl] = useState('');
-  const { contract, web3 } = useContext(AppContext);
+  const [ raffle, setRaffle] = useState();
+  const [ Goods_url, setUrl] = useState('');
+  const [ winner , setWinner ] = useState([]);
+  const [ n , setN ] = useState() ;
+  const [ E , setE ] = useState() ;
+  const { contract, web3 , account } = useContext(AppContext);
 
   // await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
   //   account: accounts[0],
@@ -19,6 +23,7 @@ const AdminPage = () => {
     try {
       e.preventDefault();
 
+      console.log('create') ;
       let start_block = await web3.eth.getBlockNumber();
       start_block = Number(start_block);
 
@@ -28,8 +33,82 @@ const AdminPage = () => {
         URL: Goods_url,
         start_block,
       });
+      
+      get_Raffle_Data();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const RaffleEnd = async (key) => {
+    try {
+      // e.preventDefault();
+
+      setN( key ) ;
+      let end_block = await web3.eth.getBlockNumber();
+      end_block = Number(end_block);
+      setE( end_block ) ;
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/raffle/${key}`
+      );
+
+      const f_B = response.data.start_block; // fromBlock : 은 디비에서
+      const e_B = end_block ;
+        
+      const a = await contract.getPastEvents('Raffle', {
+          filter: { _idx: key },
+          fromBlock: f_B,
+          toBlock: 'latest',
+      });
+
+      initializeChk() ;
+
+      a.map((v)=>{
+        const nowdata = v.returnValues._add.toLowerCase() ;
+        if (chk[nowdata] !== true ){
+          chk[ nowdata ] = true ;
+          setWinner(prev => [...prev, nowdata]);  
+        }
+      });
+
+      console.log( 'Raffle_End!' ) ;
+
+      // getwinner( key ) ;
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getwinner = async() => {
+
+    // const idx = await contract.methods.RaffleEnd( n ).call() ;
+
+    const idx = 1 ;
+
+    await axios.put(`${process.env.REACT_APP_BACKEND_URL}/raffle/${n}}/done`, {
+      end_block : E,
+      winner : winner[ idx ],
+   });
+
+    console.log(winner[1]) ;
+
+  }
+
+  useEffect( () => {
+    const length = winner.length ;
+    if( length !== 0 ){
+      setWinner([]);
+      getwinner() ;
+    } 
+  } , [winner] ) ;
+
+  const initializeChk = () => {
+    for (const key in chk) {
+      if (chk.hasOwnProperty(key)) {
+        delete chk[key];
+      }
     }
   };
 
@@ -64,7 +143,7 @@ const AdminPage = () => {
         <div className="flex flex-col">
           {raffle?.map((v, i) => {
             if (v.isEnd === false) {
-              return <div key={i}>{v.id}번 래플</div>;
+              return <button key={i} onClick={() => RaffleEnd(i+1)} >{v.id}번 래플 종료</button>;
             }
             return null;
           })}
